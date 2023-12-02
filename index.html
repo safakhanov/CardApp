@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bootstrap Site</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.0.0-alpha1/css/bootstrap.min.css"
+        integrity="sha384-r4NyP46KrjDleawBgD5tp8Y7UzmLA05oM1iAEQ17CSuDqnUK2+k9luXQOfXJCJ4I" crossorigin="anonymous">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+
+
+    <div class="bg-secondary p-5 d-flex justify-content-between align-items-center">
+        <img width="150px"
+            src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/ABB_Logo.png/1280px-ABB_Logo.png"
+            alt="Abb logo">
+
+        <h1 class="text-white ">Balance : <span id="balanceElement">0 AZN</span></h1>
+    </div>
+
+    <main class="container p-3">
+        <input id="moneyInput" type="number" class="form-control form-control-lg  border-dark "
+            placeholder="Enter value">
+
+
+        <div class="mt-2 d-flex justify-content-center">
+            <div class="btn-group " role="group" aria-label="Basic Example">
+                <button type="button" id="incrementBtn" class="btn btn-primary btn-lg">Cash In :</button>
+                <button type="button" id="decrementBtn" class="btn btn-primary btn-lg">Cash Withdraw :</button>
+                <button type="button" id="showBtn" class="btn btn-primary btn-lg bg-danger">Show Balance:</button>
+
+            </div>
+        </div>
+        <table class="table table-striped border my-5">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Type</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Time</th>
+                </tr>
+            </thead>
+            <tbody id="resultList">
+                <!-- <tr>
+                    <th scope="row">1</th>
+                    <td>Cash in</td>
+                    <td class="text-success">+100</td>
+                    <td>02.12.2023</td>
+                </tr> -->
+            </tbody>
+        </table>
+
+    </main>
+
+
+
+
+
+    <script src="index.js"></script>
+</body>
+
+</html>

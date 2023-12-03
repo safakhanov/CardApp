@@ -11,6 +11,7 @@
 </head>
 
 <body>
+    <div id="content"></div>
 
 
     <div class="bg-secondary p-5 d-flex justify-content-between align-items-center">
@@ -18,11 +19,14 @@
             src="https://upload.wikimedia.org/wikipedia/commons/thumb/3/35/ABB_Logo.png/1280px-ABB_Logo.png"
             alt="Abb logo">
 
-        <h1 class="text-white ">Balance : <span id="balanceElement">0 AZN</span></h1>
+        <h1 class="text-white ">Balance : <span id="balanceElement"> 0 </span> Azn
+
+        </h1>
     </div>
 
     <main class="container p-3">
-        <input id="moneyInput" type="number" class="form-control form-control-lg  border-dark "
+        <input id="moneyInput" type="number"
+            class="form-control form-control-lg border-dark  text-center  d-flex justify-content-between "
             placeholder="Enter value">
 
 
@@ -38,8 +42,10 @@
             <thead>
                 <tr>
                     <th scope="col">#</th>
+                    <th scope="col">Operation Id</th>
                     <th scope="col">Type</th>
                     <th scope="col">Amount</th>
+                    <th scope="col">Total Balance</th>
                     <th scope="col">Time</th>
                 </tr>
             </thead>

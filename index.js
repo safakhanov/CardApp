@@ -1,3 +1,4 @@
+
 const incrementBtn = document.querySelector("#incrementBtn");
 const decrementBtn = document.querySelector("#decrementBtn");
 const showBtn = document.querySelector("#showBtn");
@@ -5,7 +6,17 @@ const moneyInput = document.querySelector("#moneyInput");
 
 const balanceElement = document.querySelector("#balanceElement");
 const tableList = document.querySelector("#resultList");
+const contentElement = document.querySelector("#content");
 
+
+window.onload = function() {
+  const clientName = prompt("Zəhmət olmasa adınızı daxil edin:");
+  if (clientName) {
+    contentElement.innerHTML = `Salam, ${clientName}!  Şəxsi kabinetinizə xoş gəldiniz.`;
+  } else {
+    contentElement.innerHTML = "Adınızı daxil etməmisiniz. Xahiş edirik, səhifəni təkrar yükləyin və adınızı daxil edin.";
+  }
+};
 
 const bankAccount = {
   balance: 0,
@@ -13,94 +24,56 @@ const bankAccount = {
   hesabat: [],
   date: new Date(),
 
-//   cashIn: function (m) {
-//     if (this.balance >= this.limit || m <= 0 || !m) {
-//       console.log("Invalid");
-//       return;
-//     }
+  generateReferenceNumber: function (type) {
+    const prefix = type === "Cash" ? "CS" : "WD";
+    const referenceNumber = prefix + Math.floor(1000000000 + Math.random() * 1000000000);
+    return referenceNumber;
+  },
 
-//     this.balance += m;
-
-//     const history = {
-//       type: "Cash",
-//       amount: m,
-//       created: this.date
-//     };
-
-//     this.hesabat.push(history);
-
-//     return this.balance;
-//   },
-
-//   cashWithdraw: function (m) {
-//     const checkValid = () => {
-//       if (this.balance <= 0) {
-//         console.log("invalid balance");
-//         return "";
-//       }
-    
-//       this.balance -= m;
-
-//       const history = {
-//         type: "Withdraw",
-//         amount: m,
-//         created: this.date,
-//       };
-
-
-//       this.hesabat.push(history);
-//     };
-
-    
-//     checkValid();
-//     return this.balance;
-//   },
-
-// ...
-
-cashIn: function (m) {
+  cashIn: function (m) {
     if (this.balance >= this.limit || m <= 0 || !m) {
       console.log("Invalid");
       return;
     }
-  
+
     this.balance += m;
-  
     const history = {
-      type: "Cash",
+      referenceNumber: this.generateReferenceNumber("Cash"),
+      type: "Cash In",
       amount: m,
-      created: new Date() // Use the current date
+      totalAmount: this.balance,
+      created: new Date(),
     };
-  
+
     this.hesabat.push(history);
-  
+
     return this.balance;
   },
-  
+
   cashWithdraw: function (m) {
     const checkValid = () => {
-      if (this.balance <= 0) {
-        console.log("invalid balance");
+      if (this.balance <= m) {
+        alert("Pis fakir pulun yoxdu no money");
         return "";
       }
-  
       this.balance -= m;
-  
+
       const history = {
+        referenceNumber: this.generateReferenceNumber("Withdraw"),
         type: "Withdraw",
         amount: m,
-        created: new Date() // Use the current date
+        totalAmount: this.balance, // Corrected: Use the current balance as the total amount after withdrawal
+        created: new Date(),
       };
-  
+
       this.hesabat.push(history);
     };
-  
+
     checkValid();
     return this.balance;
   },
-    
 
-  showBalance: function (m) {
+  showBalance: function () {
     const thisObj = this;
     function handleMonitor() {
       console.log(thisObj.balance);
@@ -110,44 +83,50 @@ cashIn: function (m) {
     return this.balance;
   },
 };
+
 incrementBtn.addEventListener("click", function () {
   const value = moneyInput.value;
 
   bankAccount.cashIn(+value);
+  bankAccount.updateTotalBalance();
 
   moneyInput.value = "";
 });
 
 decrementBtn.addEventListener("click", function () {
-   
   const value = moneyInput.value;
   bankAccount.cashWithdraw(+value);
+  bankAccount.updateTotalBalance();
+
   moneyInput.value = "";
 });
 
-
 showBtn.addEventListener("click", function () {
-    const result = bankAccount.showBalance();
-  
-    balanceElement.innerHTML = result;
-  
-    const newContent = bankAccount.hesabat
-      .map(
-        (item, index) => `
-    <tr>
-    <th scope="row">${index + 1}</th>
-    <td>${item.type}</td>
-    <td class="text-${item.type == "Cash" ? "success" : "danger"}">${
-          item.type == "Cash" ? "+" + item.amount + " " + "Azn" : "-" + item.amount + " " + "Azn"
-        }</td>
-    <td>${item.created.toLocaleString()}</td> <!-- Display date and time -->
-  </tr>
-    `
-      )
-      .join("");
-  
-    tableList.innerHTML = newContent;
-  });
-  
-  
-  
+  const result = bankAccount.showBalance();
+  balanceElement.innerHTML = result;
+
+  const newContent = bankAccount.hesabat
+    .map(
+      (item, index) => `
+        <tr>
+          <td>${index + 1}</td>
+          <td>${item.referenceNumber}</td>
+          <td>${item.type}</td>
+          <td class="text-${item.type == "Cash In" ? "success" : "danger"}">${
+            item.type == "Cash In" ? "+" + item.amount + " Azn" : "-" + item.amount + " Azn"
+          }</td>
+          <td>${item.totalAmount}  Azn</td>
+          <td>${item.created.toLocaleString()}</td>
+        </tr>
+      `
+    )
+    .join("");
+
+  tableList.innerHTML = newContent;
+});
+
+bankAccount.updateTotalBalance = function () {
+  const totalBalance = this.hesabat.length > 0 ? this.hesabat[this.hesabat.length - 1].totalAmount : 0;
+  balanceElement.innerHTML = totalBalance;
+};
+

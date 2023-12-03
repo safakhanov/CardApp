@@ -25,7 +25,7 @@ const bankAccount = {
   date: new Date(),
 
   generateReferenceNumber: function (type) {
-    const prefix = type === "Cash" ? "CS" : "WD";
+    const prefix = type === "Cash" ? "CS#" : "WD#";
     const referenceNumber = prefix + Math.floor(1000000000 + Math.random() * 1000000000);
     return referenceNumber;
   },
